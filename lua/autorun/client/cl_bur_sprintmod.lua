@@ -47,7 +47,7 @@ function GetClientMove(cmd)
 	end
 
 
-	if cmd:KeyDown(IN_SPEED) and ( cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) ) and (ply:GetVelocity():Length() > 0) and ( ply:OnGround() or ply:WaterLevel() ~= 0 ) then
+	if cmd:KeyDown(IN_SPEED) and ( cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) ) and (ply:GetVelocity():Length() > ply:GetWalkSpeed()) and ( ply:OnGround() or ply:WaterLevel() ~= 0 ) and !ply:InVehicle() then
 	
 		if ply.BurgerStamina <= 0 then
 		
@@ -63,7 +63,7 @@ function GetClientMove(cmd)
 	end
 	
 	--Jumping code provided by bobbleheadbob
-	if cmd:KeyDown(IN_JUMP) and ply:OnGround() then
+	if cmd:KeyDown(IN_JUMP) and ply:OnGround() and !ply:InVehicle() then
 	
 		if ply.BurgerStamina <= 5 then
 		
