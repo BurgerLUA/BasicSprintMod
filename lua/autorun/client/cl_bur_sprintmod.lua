@@ -47,7 +47,7 @@ function GetClientMove(cmd)
 	end
 
 
-	if cmd:KeyDown(IN_SPEED) and ( cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) ) and (ply:GetVelocity():Length() > ply:GetWalkSpeed()) and ( ply:OnGround() or ply:WaterLevel() ~= 0 ) and !ply:InVehicle() then
+	if cmd:KeyDown(IN_SPEED) and ( cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT) ) and (ply:GetVelocity():Length() > 100) and ( ply:OnGround() or ply:WaterLevel() ~= 0 ) and !ply:InVehicle() then
 	
 		if ply.BurgerStamina <= 0 then
 		
@@ -55,10 +55,12 @@ function GetClientMove(cmd)
 
 		else
 			
-			ply.NextRegen = CurTime() + 1.25
+			
 			ply.BurgerStamina = math.Clamp(ply.BurgerStamina - Change * ply.BurgerDecayMul,0,ply.BurgerMaxStamina)
+			ply.NextRegen = CurTime() + 1.25
 
 		end
+		
 		
 	end
 	
@@ -80,7 +82,7 @@ function GetClientMove(cmd)
 				end
 
 			end
-
+			
 			ply.NextRegen = CurTime() + 1.25
 			
 		end
@@ -124,15 +126,17 @@ function GetClientMove(cmd)
 	
 		if ply.NextRegen < CurTime() then
 			
+			
 			if (cmd:KeyDown(IN_FORWARD) or cmd:KeyDown(IN_BACK) or cmd:KeyDown(IN_MOVELEFT) or cmd:KeyDown(IN_MOVERIGHT)) then
-				ply.BurgerStamina = math.Clamp(ply.BurgerStamina + ( Change * 0.1 * ply.BurgerRegenMul ) ,0,ply.BurgerMaxStamina)
-			else
-				ply.BurgerStamina = math.Clamp(ply.BurgerStamina + ( Change * 0.5 * ply.BurgerRegenMul ) ,0,ply.BurgerMaxStamina)
+					ply.BurgerStamina = math.Clamp(ply.BurgerStamina + ( Change * 0.1 * ply.BurgerRegenMul ) ,0,ply.BurgerMaxStamina)
+				else
+					ply.BurgerStamina = math.Clamp(ply.BurgerStamina + ( Change * 0.5 * ply.BurgerRegenMul ) ,0,ply.BurgerMaxStamina)
 			end
 			
 		end
 		
 	end
+	
 
 	cmd:SetButtons(NewButtons)
 
