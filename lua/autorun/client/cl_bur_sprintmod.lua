@@ -1,3 +1,5 @@
+CreateClientConVar("cl_bur_sprintmod_enablehud",1,true,false)
+CreateClientConVar("cl_bur_sprintmod_fade",1,true,false)
 
 
 
@@ -165,14 +167,34 @@ surface.CreateFont( "SprintFont", {
 	outline = false, 
 } )
 
+local Alpha = 0
+
 function DrawBurStamina()
 
 	local ply = LocalPlayer()
 	
 	if ply.HasOblivionHUD then return end
+	
+	if GetConVarNumber("cl_bur_sprintmod_enablehud") == 0 then return end
 
 	local Stamina = ply.BurgerStamina
 	local MaxStamina = ply.BurgerMaxStamina
+	
+	if GetConVarNumber("cl_bur_sprintmod_fade") then
+	
+		if Stamina == MaxStamina then
+			Alpha = math.max(0,Alpha - 100*FrameTime())
+		else
+			Alpha = math.min(100,Alpha + 100*FrameTime())
+		end
+		
+	else
+	
+		Alpha = 100
+	
+	end
+	
+	local BasePercent = Alpha/100
 
 	if MaxStamina then
 			
@@ -192,14 +214,14 @@ function DrawBurStamina()
 
 			
 		surface.SetMaterial( Mat )
-		surface.SetDrawColor(0,0,0,BaseFade/2)
+		surface.SetDrawColor(0,0,0, (BaseFade/2) * BasePercent)
 		surface.DrawTexturedRectRotated(XPos,YPos,XSize,YSize,0)
 			
 		surface.SetMaterial( Mat )
-		surface.SetDrawColor(0,255,0,BaseFade)
+		surface.SetDrawColor(0,255,0,BaseFade * BasePercent)
 		surface.DrawTexturedRectRotated(XPos,YPos,XSize*0.9*Percent,YSize*0.5,0)
 
-		draw.DrawText("ENERGY","SprintFont",XPos,YPos - BarHeight/2,Color(255,255,255,255*Percent),TEXT_ALIGN_CENTER)
+		draw.DrawText("ENERGY","SprintFont",XPos,YPos - BarHeight/2,Color(255,255,255,255*Percent*BasePercent),TEXT_ALIGN_CENTER)
 			
 	end
 	
